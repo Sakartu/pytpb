@@ -164,8 +164,10 @@ if __name__ == '__main__':
     for i, t in enumerate(t.search(term)):
         print '{i:2d}. {name:>{maxlen}} {size:10} : {seeders}'.format(i=i, maxlen=maxlen, name=t['name'], size='(' + prettySize(t['size_of']) + ')', seeders=t['seeders'])
 
-    for num in raw_input("Please provide a comma separated list of magnet links you want to print: ").split(','):
+    for num in raw_input("Please provide a comma separated list of torrents you want to get: ").split(','):
         try:
-            print int(num), '\n', torrents[int(num)]['magnet_url']
-        except:
-            continue
+            t = torrents[int(num)]
+            print num, ':', t['magnet_url']
+        except Exception, e:
+            print 'Something went wrong:', e
+            sys.exit()
