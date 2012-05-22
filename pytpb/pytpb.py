@@ -151,6 +151,10 @@ if __name__ == '__main__':
                 continue
             else:
                 return round(size/float(lim/2**10),2).__str__()+suf
+
+    def magnet_to_torrent(uri):
+        return "d10:magnet-uri" + str(len(uri)) + ':' + uri + 'e'
+
     t = ThePirateBay()
     if sys.argv[1:]:
         term = ' '.join(sys.argv[1:])
@@ -160,14 +164,18 @@ if __name__ == '__main__':
     
     torrents = t.search(term)
     maxlen = max(len(x['name']) for x in torrents) + 3
-    torrents = sorted(torrents, key=lambda x : int(x['seeders']))
-    for i, t in enumerate(t.search(term)):
+
+    for i, t in enumerate(torrents):
         print '{i:2d}. {name:>{maxlen}} {size:10} : {seeders}'.format(i=i, maxlen=maxlen, name=t['name'], size='(' + prettySize(t['size_of']) + ')', seeders=t['seeders'])
 
     for num in raw_input("Please provide a comma separated list of torrents you want to get: ").split(','):
         try:
             t = torrents[int(num)]
             print num, ':', t['magnet_url']
+            outname = t['torrent_info_url'][t['torrent_info_url'].rfind('/') + 1:] + '.torrent'
+            with open(outname, 'w') as out:
+                out.write(magnet_to_torrent(t['magnet_url']))
+                print 'Written magnet URI to file "{name}"'.format(name=outname)
         except Exception, e:
             print 'Something went wrong:', e
             sys.exit()
