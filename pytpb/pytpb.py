@@ -188,7 +188,7 @@ if __name__ == '__main__':
                 t = torrents[int(num)]
                 print num, ':', t['magnet_url']
                 outname = t['torrent_info_url'][t['torrent_info_url'].rfind(
-                    '/') + 1:] + '.torrent'
+                    '/') + 1:] + '.magnet'
                 with open(outname, 'w') as out:
                     out.write(magnet_to_torrent(t['magnet_url']))
                     print 'Written magnet URI to file "{name}"'.format(
