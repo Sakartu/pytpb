@@ -64,7 +64,6 @@ class SearchResultParser:
                         data["user_type"] = "VIP"
                     elif ele[0].get('title') == "Trusted":
                         data["user_type"] = "trusted"
-
             elif ele.tag == 'font':
                 a = ele.find('a')
                 if a is None:
@@ -174,9 +173,12 @@ if __name__ == '__main__':
         sys.exit(1)
     maxlen = max(len(x['name']) for x in torrents) + 3
 
+    print u'{i:>2s}.  {uploaded_at:17s} {name:>{maxlen}} {size:10} : {seeders}'.format(
+            i='#', uploaded_at='Uploaded at', maxlen=maxlen, name='Name', size='Size',
+            seeders='Seeders')
     for i, t in enumerate(torrents):
-        print u'{i:2d}. {name:>{maxlen}} {size:10} : {seeders}'.format(i=i,
-                maxlen=maxlen, name=t['name'], size='(' +
+        print u'{i:2d}.  {uploaded_at} {name:>{maxlen}} {size:10} : {seeders}'.format(i=i,
+                uploaded_at=t['uploaded_at'].strftime('%x %X'), maxlen=maxlen, name=t['name'], size='(' +
                 prettySize(t['size_of']) + ')', seeders=t['seeders'])
 
     try:
